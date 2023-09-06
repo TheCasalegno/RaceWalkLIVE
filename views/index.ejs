@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Homepage - RaceWalkLIVE</title>
+  </head>
+  <body>
+    <h1>Ciao! Questa è la pagina con i rislutati di RaceWalkLIVE</h1>
+    <p>Attendi che un SENDER invii un messaggio</p>
+
+    <p id="number"></p>
+    <p id="name"></p>
+    <p id="club"></p>
+    <p id="race"></p>
+    <p id="type"></p>
+
+    <script>
+      const socket = new WebSocket("ws://localhost:8880");
+
+      socket.addEventListener("open", function (event) {
+        console.log("Client VIEWER connesso a server INDEX");
+      });
+
+      socket.addEventListener("message", (event) => {
+        let jsonData = JSON.parse(event.data);
+        // Supponiamo che tu abbia ricevuto il JSON come 'jsonData' tramite WebSocket
+
+        // Itera attraverso le chiavi dell'oggetto JSON
+        for (const key in jsonData) {
+          if (jsonData.hasOwnProperty(key)) {
+            let value = jsonData[key];
+
+            // Trova l'elemento paragrafo esistente utilizzando l'ID
+            let paragraph = document.getElementById(key);
+
+            if (paragraph) {
+              // Aggiorna il contenuto del paragrafo con il valore corrispondente dal JSON
+              paragraph.textContent = `${key}: ${value}`;
+            }
+          }
+        }
+      });
+    </script>
+  </body>
+</html>
